@@ -29,11 +29,17 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001'], // Add other ports if necessary
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: "*", // Add other ports if necessary
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }
+app.use((req, res, next) => {
+  console.log('CORS middleware executed');
+  next();
+});
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 /* FILE STORAGE */
